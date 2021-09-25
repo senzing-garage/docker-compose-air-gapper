@@ -9,38 +9,6 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
 1. Software requirements on the air-gapped system:
     1. [docker](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker.md)
     1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker-compose.md)
-    1. [python 3](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-python-3.md)
-        1. Using [pip3](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-pip3.md),
-        1. install Python requirements in [requirements.txt](requirments.txt).
-
-### Download docker-compose-air-gapper.py
-
-1. Get a local copy of
-   [docker-compose-air-gapper.py](docker-compose-air-gapper.py).
-   Example:
-
-    1. :pencil2: Specify where to download file.
-       Example:
-
-        ```console
-        export SENZING_DOWNLOAD_FILE=~/docker-compose-air-gapper.py
-        ```
-
-    1. Download file.
-       Example:
-
-        ```console
-        curl -X GET \
-          --output ${SENZING_DOWNLOAD_FILE} \
-          https://raw.githubusercontent.com/Senzing/docker-compose-air-gapper/main/docker-compose-air-gapper.py
-        ```
-
-    1. Make file executable.
-       Example:
-
-        ```console
-        chmod +x ${SENZING_DOWNLOAD_FILE}
-        ```
 
 ### Prepare docker-compose.yaml
 
@@ -71,35 +39,29 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
     source ~/docker-versions-latest.sh
     ```
 
-### Create save-images.sh
-
-This step creates the `save-images.sh` shell script using a specified `docker-compose.yaml` file.
-
-1. :pencil2: Identify the file to hold a new shell script.
-   This script will be used to download, save, and compress docker images into a single file.
-   Example:
-
-    ```console
-    export SENZING_SAVE_IMAGE_FILE=~/save-images.sh
-    ```
-
-1. Create `save-images.sh` by using `docker-compose config` to normalize `docker-compose.yaml`.
-   The normalized output is used by `docker-compose-air-gapper.py` to create `save-images.sh`
+1. Use `docker-compose config` to normalize the docker-compose.yaml file.
    Example:
 
     ```console
     cd ${SENZING_DOCKER_COMPOSE_DIRECTORY}
 
-    docker-compose config \
-       | ${SENZING_DOWNLOAD_FILE} create-save-images \
-       > ${SENZING_SAVE_IMAGE_FILE}
+    docker-compose config > docker-compose-normalized.yaml
     ```
 
-1. Make `save-image.sh` executable.
+1. Using a `senzing/docker-compose-air-gapper` docker container,
+   create a `save-images.sh` file in the `SENZING_DOCKER_COMPOSE_DIRECTORY` directory.
    Example:
 
     ```console
-    chmod +x ${SENZING_SAVE_IMAGE_FILE}
+    docker run \
+      --env SENZING_DOCKER_COMPOSE_FILE=/data/docker-compose-normalized.yaml \
+      --env SENZING_OUTPUT_FILE=/data/save-images.sh \
+      --env SENZING_SUBCOMMAND=create-save-images \
+      --interactive \
+      --rm \
+      --tty \
+      --volume ${SENZING_DOCKER_COMPOSE_DIRECTORY}:/data \
+      senzing/docker-compose-air-gapper
     ```
 
 ### Run save-images.sh
@@ -108,7 +70,10 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
    Example:
 
     ```console
-    ${SENZING_SAVE_IMAGE_FILE}
+    cd ${SENZING_DOCKER_COMPOSE_DIRECTORY}
+    chmod +x save-images.sh
+
+    ./save-images.sh
     ```
 
 ## In air-gapped environment
@@ -181,4 +146,70 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
     ```console
     cd ${SENZING_INPUT_DIRECTORY}
     docker-compose up
+    ```
+
+## Alternatives
+
+### Download docker-compose-air-gapper.py
+
+1. Have [python 3](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-python-3.md) installed.
+    1. Using [pip3](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-pip3.md),
+       install Python requirements in [requirements.txt](requirments.txt).
+
+1. Get a local copy of
+   [docker-compose-air-gapper.py](docker-compose-air-gapper.py).
+   Example:
+
+    1. :pencil2: Specify where to download file.
+       Example:
+
+        ```console
+        export SENZING_DOWNLOAD_FILE=~/docker-compose-air-gapper.py
+        ```
+
+    1. Download file.
+       Example:
+
+        ```console
+        curl -X GET \
+          --output ${SENZING_DOWNLOAD_FILE} \
+          https://raw.githubusercontent.com/Senzing/docker-compose-air-gapper/main/docker-compose-air-gapper.py
+        ```
+
+    1. Make file executable.
+       Example:
+
+        ```console
+        chmod +x ${SENZING_DOWNLOAD_FILE}
+        ```
+
+### Create save-images.sh
+
+This step creates the `save-images.sh` shell script using a specified `docker-compose.yaml` file.
+
+1. :pencil2: Identify the file to hold a new shell script.
+   This script will be used to download, save, and compress docker images into a single file.
+   Example:
+
+    ```console
+    export SENZING_SAVE_IMAGE_FILE=~/save-images.sh
+    ```
+
+1. Create `save-images.sh` by using `docker-compose config` to normalize `docker-compose.yaml`.
+   The normalized output is used by `docker-compose-air-gapper.py` to create `save-images.sh`
+   Example:
+
+    ```console
+    cd ${SENZING_DOCKER_COMPOSE_DIRECTORY}
+
+    docker-compose config \
+       | ${SENZING_DOWNLOAD_FILE} create-save-images \
+       > ${SENZING_SAVE_IMAGE_FILE}
+    ```
+
+1. Make `save-image.sh` executable.
+   Example:
+
+    ```console
+    chmod +x ${SENZING_SAVE_IMAGE_FILE}
     ```
