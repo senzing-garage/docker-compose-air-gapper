@@ -484,10 +484,6 @@ do
 
 done
 
-# Copy additional files into output directory.
-
-cp ${{DOCKER_COMPOSE_FILENAME}} ${{OUTPUT_DIR}}/docker-compose.yaml
-
 # Compress results.
 
 tar -zcvf ${{OUTPUT_FILE}} --directory ${{MY_HOME}} ${{OUTPUT_DIR_NAME}}
