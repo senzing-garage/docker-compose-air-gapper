@@ -78,6 +78,9 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
     ./save-images.sh
     ```
 
+1. After `save-images.sh` has completed, there will be a new `~/docker-compose-air-gapper-0000000000.tgz` file.
+   This is the file to be transferred to the air-gapped system.
+
 ## In air-gapped environment
 
 ### Air-gapped prerequisites
@@ -185,7 +188,7 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
         chmod +x ${SENZING_DOWNLOAD_FILE}
         ```
 
-### Create save-images.sh
+### Create save-images.sh using command-line
 
 This step creates the `save-images.sh` shell script using a specified `docker-compose.yaml` file.
 
