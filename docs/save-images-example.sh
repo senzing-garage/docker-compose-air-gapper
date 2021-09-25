@@ -7,12 +7,13 @@
 
 # Identify source docker-compose.yaml file.
 
-DOCKER_COMPOSE_FILENAME=~/senzing.git/docker-compose-demo/resources/postgresql/docker-compose-rabbitmq-postgresql.yamlXX
+DOCKER_COMPOSE_FILENAME=~/senzing.git/docker-compose-demo/resources/postgresql/docker-compose-rabbitmq-postgresql.yaml
 
 # Enumerate docker images to be processed.
 
 DOCKER_IMAGE_NAMES=(
-  "senzing/senzing-base:latest"
+  "senzing/senzing-console:1.0.3"
+  "senzing/xterm:1.2.0"
 )
 
 # Make output variables.
@@ -42,7 +43,7 @@ cat <<EOT > ${OUTPUT_LOAD_REPOSITORY_SCRIPT}
 #!/usr/bin/env bash
 
 # 'load-images.sh' uses 'docker load' to import images into local registry.
-# Based on ${DOCKER_COMPOSE_FILENAME}
+# Source Dockerfile: ${DOCKER_COMPOSE_FILENAME}
 # Created on ${OUTPUT_DATE_HUMAN}
 
 EOT
