@@ -80,6 +80,13 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
 
 1. After `save-images.sh` has completed, there will be a new `~/docker-compose-air-gapper-0000000000.tgz` file.
    This is the file to be transferred to the air-gapped system.
+   Example output:
+
+    ```console
+    Done.
+        Output file: /home/senzing/docker-compose-air-gapper-0000000000.tgz
+        Which is a compressed version of /home/senzing/docker-compose-air-gapper-0000000000
+    ```
 
 ## In air-gapped environment
 
