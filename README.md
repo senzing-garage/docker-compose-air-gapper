@@ -115,7 +115,7 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
 
 ### docker-compose up
 
-1. :pencil2: Set environment variables.
+1. :pencil2: Set environment variables that are use by the `docker-compose.yaml` file.
    **NOTE:** Depending on the `docker-compose.yaml`, more environment variables may need to be set.
    Example:
 
