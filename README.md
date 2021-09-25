@@ -13,11 +13,6 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
 ### Prepare docker-compose.yaml
 
 1. :pencil2: Identify the directory containing the `docker-compose.yaml` file.
-   **Note:** Unfortunately `docker-compose config` only accepts 4 file names:
-   `docker-compose.yml`, `docker-compose.yaml`, `compose.yml`, and `compose.yaml`.
-   So if your docker-compose.yaml file in the `SENZING_DOCKER_COMPOSE_DIRECTORY` directory has a different name,
-   it will need to be renamed or copied to an acceptable name.
-   A docker-compose [GitHub issue](https://github.com/docker/compose/issues/8671) has been created to address this.
    Example:
 
     ```console
@@ -40,6 +35,11 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
     ```
 
 1. Use `docker-compose config` to normalize the docker-compose.yaml file.
+   **Note:** Unfortunately `docker-compose config` only accepts 4 file names:
+   `docker-compose.yml`, `docker-compose.yaml`, `compose.yml`, and `compose.yaml`.
+   So if your docker-compose.yaml file in the `SENZING_DOCKER_COMPOSE_DIRECTORY` directory has a different name,
+   it will need to be renamed or copied to an acceptable name.
+   A docker-compose [GitHub issue](https://github.com/docker/compose/issues/8671) has been created to address this.
    Example:
 
     ```console
