@@ -6,11 +6,11 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
 
 ### Internet-connected prerequisites
 
-1. Software requirements on the air-gapped system:
+1. Software requirements on the internet-connected (i.e. not the air-gapped) system:
     1. [docker](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker.md)
     1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker-compose.md)
 
-### Prepare docker-compose.yaml
+### Create save-images.sh
 
 1. :pencil2: Identify the directory containing the `docker-compose.yaml` file.
    Example:
@@ -19,7 +19,7 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
     export SENZING_DOCKER_COMPOSE_DIRECTORY=~/my-docker-compose
     ```
 
-1. :thinking: Set any needed environment variables.
+1. :thinking: **Optional:** Set any needed environment variables.
    For instance,
    to specify the latest docker image tags for docker-compose.yaml files in
    [docker-compose-demo](https://github.com/Senzing/docker-compose-demo)
@@ -34,12 +34,14 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
     source ~/docker-versions-latest.sh
     ```
 
-1. Use `docker-compose config` to normalize the docker-compose.yaml file.
+1. Use `docker-compose config` to normalize the `docker-compose.yaml` file.
+
    **Note:** Unfortunately `docker-compose config` only accepts 4 file names:
    `docker-compose.yml`, `docker-compose.yaml`, `compose.yml`, and `compose.yaml`.
    So if your docker-compose.yaml file in the `SENZING_DOCKER_COMPOSE_DIRECTORY` directory has a different name,
    it will need to be renamed or copied to an acceptable name.
    A docker-compose [GitHub issue](https://github.com/docker/compose/issues/8671) has been created to address this.
+
    Example:
 
     ```console
