@@ -4,6 +4,8 @@
 # docker-compose-air-gapper.py
 # -----------------------------------------------------------------------------
 
+# Import from standard library. https://docs.python.org/3/library/
+
 import argparse
 import json
 import linecache
@@ -12,7 +14,12 @@ import os
 import signal
 import sys
 import time
+
+# Import from https://pypi.org/
+
 import yaml
+
+# Metadata
 
 __all__ = []
 __version__ = "1.0.0"  # See https://www.python.org/dev/peps/pep-0396/
