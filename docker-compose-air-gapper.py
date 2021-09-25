@@ -576,7 +576,7 @@ def do_create_save_images(args):
 
     output_file = config.get('output_file')
     if output_file:
-        with open(output_file, w) as a_file:
+        with open(output_file, "w") as a_file:
             a_file.write(output_text)
     else:
         print(output_text)

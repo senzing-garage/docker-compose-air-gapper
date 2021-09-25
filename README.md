@@ -4,6 +4,15 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
 
 ## In an internet-connected environment
 
+### Internet-connected prerequisites
+
+1. Software requirements on the air-gapped system:
+    1. [docker](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker.md)
+    1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker-compose.md)
+    1. [python 3](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-python-3.md)
+        1. Using [pip3](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-pip3.md),
+        1. install Python requirements in [requirements.txt](requirments.txt).
+
 ### Download docker-compose-air-gapper.py
 
 1. Get a local copy of
