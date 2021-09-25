@@ -74,7 +74,8 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
     export SENZING_SAVE_IMAGE_FILE=~/save-images.sh
     ```
 
-1. XXX
+1. Create `save-images.sh` by using `docker-compose config` to normalize `docker-compose.yaml`.
+   The normalized output is used by `docker-compose-air-gapper.py` to create `save-images.sh`
    Example:
 
     ```console
