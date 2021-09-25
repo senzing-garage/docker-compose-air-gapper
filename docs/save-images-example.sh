@@ -73,7 +73,7 @@ done
 
 # Copy additional files into output directory.
 
-cp ${DOCKER_COMPOSE_FILENAME} ${OUTPUT_DIR}
+cp ${DOCKER_COMPOSE_FILENAME} ${OUTPUT_DIR}/docker-compose.yaml
 
 # Compress results.
 

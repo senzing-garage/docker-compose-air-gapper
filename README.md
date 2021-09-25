@@ -64,6 +64,13 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
 
 ## In air-gapped environment
 
+### Air-gapped prerequisites
+
+1. Software requirements:
+    1. [docker](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker.md)
+    1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker-compose.md)
+1. The `docker-compose-air-gapper-0000000000.tgz` needs to be transferred to the air-gapped system.
+
 ### Load air-gapped docker repository
 
 1. :pencil2: Set Environment variables.
@@ -92,7 +99,8 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
 
     ```console
     export SENZING_TGZ_FILENAME=${SENZING_TGZ_FILE##*/}
-    cd ${SENZING_OUTPUT_DIRECTORY}/${SENZING_TGZ_FILENAME%%.tgz}
+    export SENZING_INPUT_DIRECTORY=${SENZING_OUTPUT_DIRECTORY}/${SENZING_TGZ_FILENAME%%.tgz}
+    cd ${SENZING_INPUT_DIRECTORY}
     ```
 
 1. Run `load-images.sh`.
@@ -102,4 +110,25 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
 
     ```console
     ./load-images.sh
+    ```
+
+### docker-compose up
+
+1. :pencil2: Set environment variables.
+   **NOTE:** Depending on the `docker-compose.yaml`, more environment variables may need to be set.
+   Example:
+
+    ```console
+    export SENZING_DATA_VERSION_DIR=/opt/senzing/data/2.0.0
+    export SENZING_ETC_DIR=/etc/opt/senzing
+    export SENZING_G2_DIR=/opt/senzing/g2
+    export SENZING_VAR_DIR=/var/opt/senzing
+    ```
+
+1. Bring up docker-compose.
+   Example:
+
+    ```console
+    cd ${SENZING_INPUT_DIRECTORY}
+    docker-compose up
     ```
