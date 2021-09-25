@@ -33,14 +33,13 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
         chmod +x ${SENZING_DOWNLOAD_FILE}
         ```
 
-### Create save-images.sh
-
-This step creates the `save-images.sh` shell script using a specified `docker-compose.yaml` file.
+### Prepare docker-compose.yaml
 
 1. :pencil2: Identify the directory containing the `docker-compose.yaml` file.
    **Note:** Unfortunately `docker-compose config` only accepts 4 file names:
-   docker-compose.yml, docker-compose.yaml, compose.yml, compose.yaml.
-   So if your docker-compose file has a different name, it will need to be renamed or copied to an acceptable name.
+   `docker-compose.yml`, `docker-compose.yaml`, `compose.yml`, and `compose.yaml`.
+   So if your docker-compose.yaml file in the `SENZING_DOCKER_COMPOSE_DIRECTORY` directory has a different name,
+   it will need to be renamed or copied to an acceptable name.
    A docker-compose [GitHub issue](https://github.com/docker/compose/issues/8671) has been created to address this.
    Example:
 
@@ -48,8 +47,27 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
     export SENZING_DOCKER_COMPOSE_DIRECTORY=~/my-docker-compose
     ```
 
-1. :pencil3: Identify the directory to hold a new shell script.
-   This script will be used to download, save and compress docker images into a single file.
+1. :thinking: Set any needed environment variables.
+   For instance,
+   to specify the latest docker image tags for docker-compose.yaml files in
+   [docker-compose-demo](https://github.com/Senzing/docker-compose-demo)
+   environment variables can be set in this manner.
+   Example:
+
+    ```console
+    curl -X GET \
+      --output ~/docker-versions-latest.sh \
+      https://raw.githubusercontent.com/Senzing/knowledge-base/master/lists/docker-versions-latest.sh
+
+    source ~/docker-versions-latest.sh
+    ```
+
+### Create save-images.sh
+
+This step creates the `save-images.sh` shell script using a specified `docker-compose.yaml` file.
+
+1. :pencil2: Identify the file to hold a new shell script.
+   This script will be used to download, save, and compress docker images into a single file.
    Example:
 
     ```console
