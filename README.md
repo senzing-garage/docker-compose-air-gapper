@@ -68,7 +68,7 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
 
 ### Run save-images.sh
 
-1. Run `save-image.sh`
+1. Run `save-images.sh`
    Example:
 
     ```console
