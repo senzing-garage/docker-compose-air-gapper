@@ -4,6 +4,8 @@
 # docker-compose-air-gapper.py
 # -----------------------------------------------------------------------------
 
+# Import from standard library. https://docs.python.org/3/library/
+
 import argparse
 import json
 import linecache
@@ -12,7 +14,12 @@ import os
 import signal
 import sys
 import time
+
+# Import from https://pypi.org/
+
 import yaml
+
+# Metadata
 
 __all__ = []
 __version__ = "1.0.0"  # See https://www.python.org/dev/peps/pep-0396/
@@ -477,10 +484,6 @@ do
 
 done
 
-# Copy additional files into output directory.
-
-cp ${{DOCKER_COMPOSE_FILENAME}} ${{OUTPUT_DIR}}/docker-compose.yaml
-
 # Compress results.
 
 tar -zcvf ${{OUTPUT_FILE}} --directory ${{MY_HOME}} ${{OUTPUT_DIR_NAME}}
@@ -569,7 +572,7 @@ def do_create_save_images(args):
 
     output_file = config.get('output_file')
     if output_file:
-        with open(output_file, w) as a_file:
+        with open(output_file, "w") as a_file:
             a_file.write(output_text)
     else:
         print(output_text)
