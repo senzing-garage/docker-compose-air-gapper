@@ -4,7 +4,7 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
 
 ## In an internet-connected environment
 
-### Download docker-compsoe-air-gapper.py
+### Download docker-compose-air-gapper.py
 
 1. Get a local copy of
    [docker-compose-air-gapper.py](docker-compose-air-gapper.py).
@@ -33,33 +33,54 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
         chmod +x ${SENZING_DOWNLOAD_FILE}
         ```
 
-### Run
+### Create save-images.sh
 
 This step creates the `save-images.sh` shell script using a specified `docker-compose.yaml` file.
 
-1. XXX
+1. :pencil2: Identify the directory containing the `docker-compose.yaml` file.
+   **Note:** Unfortunately `docker-compose config` only accepts 4 file names:
+   docker-compose.yml, docker-compose.yaml, compose.yml, compose.yaml.
+   So if your docker-compose file has a different name, it will need to be renamed or copied to an acceptable name.
+   A docker-compose [GitHub issue](https://github.com/docker/compose/issues/8671) has been created to address this.
    Example:
 
     ```console
+    export SENZING_DOCKER_COMPOSE_DIRECTORY=~/my-docker-compose
     ```
 
-### Download
-
-1. XXX
+1. :pencil3: Identify the directory to hold a new shell script.
+   This script will be used to download, save and compress docker images into a single file.
    Example:
 
     ```console
-
+    export SENZING_SAVE_IMAGE_FILE=~/save-images.sh
     ```
 
-### XXXX
-
-### xxxXX
-
 1. XXX
    Example:
 
     ```console
+    cd ${SENZING_DOCKER_COMPOSE_DIRECTORY}
+
+    docker-compose config \
+       | ${SENZING_DOWNLOAD_FILE} create-save-images \
+       > ${SENZING_SAVE_IMAGE_FILE}
+    ```
+
+1. Make `save-image.sh` executable.
+   Example:
+
+    ```console
+    chmod +x ${SENZING_SAVE_IMAGE_FILE}
+    ```
+
+### Run save-images.sh
+
+1. Run `save-image.sh`
+   Example:
+
+    ```console
+    ${SENZING_SAVE_IMAGE_FILE}
     ```
 
 ## In air-gapped environment
@@ -113,7 +134,7 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
     ./load-images.sh
     ```
 
-### docker-compose up
+### Run docker-compose up
 
 1. :pencil2: Set environment variables that are use by the `docker-compose.yaml` file.
    **NOTE:** Depending on the `docker-compose.yaml`, more environment variables may need to be set.

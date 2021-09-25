@@ -42,6 +42,11 @@ configuration_locator = {
         "env": "SENZING_DOCKER_COMPOSE_FILE",
         "cli": "docker-compose-file"
     },
+    "output_file": {
+        "default": None,
+        "env": "SENZING_OUTPUT_FILE",
+        "cli": "output-file"
+    },
     "sleep_time_in_seconds": {
         "default": 0,
         "env": "SENZING_SLEEP_TIME_IN_SECONDS",
@@ -75,7 +80,12 @@ def get_parser():
                 "--docker-compose-file": {
                     "dest": "docker_compose_file",
                     "metavar": "SENZING_DOCKER_COMPOSE_FILE",
-                    "help": "Location of 'docker-compose.yaml' file. Default: None"
+                    "help": "Location of 'docker-compose.yaml' file. Default: STDIN"
+                },
+                "--output-file": {
+                    "dest": "output_file",
+                    "metavar": "SENZING_OUTPUT_FILE",
+                    "help": "Send output to this file. Default: STDOUT"
                 },
             },
         },
@@ -296,11 +306,6 @@ def validate_configuration(config):
 
     subcommand = config.get('subcommand')
 
-    if subcommand in ['task1', 'task2']:
-
-        if not config.get('senzing_dir'):
-            user_error_messages.append(message_error(414))
-
     # Log warning messages.
 
     for user_warning_message in user_warning_messages:
@@ -390,10 +395,10 @@ def exit_silently():
     ''' Exit program. '''
     sys.exit(0)
 
-
 # -----------------------------------------------------------------------------
 # Utility functions
 # -----------------------------------------------------------------------------
+
 
 def replace_variables_in_text(function_with_text, variables):
     """ Perform variable replacement in text """
@@ -403,6 +408,7 @@ def replace_variables_in_text(function_with_text, variables):
 # -----------------------------------------------------------------------------
 # Text functions
 # -----------------------------------------------------------------------------
+
 
 def file_text_for_save_images():
     """#!/usr/bin/env bash
@@ -414,8 +420,7 @@ def file_text_for_save_images():
 # Enumerate docker images to be processed.
 
 DOCKER_IMAGE_NAMES=(
-{image_list}
-)
+{image_list})
 
 # Make output variables.
 
@@ -494,6 +499,7 @@ exit ${{OK}}
 # Text functions
 # -----------------------------------------------------------------------------
 
+
 def create_output_text(images):
     """ Perform variable replacement in text """
 
@@ -504,7 +510,6 @@ def create_output_text(images):
         "image_list": image_list,
     }
     return replace_variables_in_text(file_text_for_save_images, variables)
-
 
 # -----------------------------------------------------------------------------
 # do_* functions
@@ -539,7 +544,7 @@ def do_create_save_images(args):
 
     logging.info(entry_template(config))
 
-    # Construct docker_compose.
+    # Construct docker_compose dictionary from YAML.
 
     docker_compose = {}
     docker_compose_file = config.get('docker_compose_file')
