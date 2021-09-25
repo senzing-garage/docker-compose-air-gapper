@@ -1,23 +1,9 @@
 #! /usr/bin/env python3
 
 # -----------------------------------------------------------------------------
-# template-python.py Example python skeleton.
-# Can be used as a boiler-plate to build new python scripts.
-# This skeleton implements the following features:
-#   1) "command subcommand" command line.
-#   2) A structured command line parser and "-help"
-#   3) Configuration via:
-#      3.1) Command line options
-#      3.2) Environment variables
-#      3.3) Configuration file
-#      3.4) Default
-#   4) Messages dictionary
-#   5) Logging and Log Level support.
-#   6) Entry / Exit log messages.
-#   7) Docker support.
+# docker-compose-air-gapper.py
 # -----------------------------------------------------------------------------
 
-from glob import glob
 import argparse
 import json
 import linecache
@@ -26,6 +12,7 @@ import os
 import signal
 import sys
 import time
+import yaml
 
 __all__ = []
 __version__ = "1.0.0"  # See https://www.python.org/dev/peps/pep-0396/
@@ -50,15 +37,10 @@ configuration_locator = {
         "env": "SENZING_DEBUG",
         "cli": "debug"
     },
-    "password": {
+    "docker_compose_file": {
         "default": None,
-        "env": "SENZING_PASSWORD",
-        "cli": "password"
-    },
-    "senzing_dir": {
-        "default": "/opt/senzing",
-        "env": "SENZING_DIR",
-        "cli": "senzing-dir"
+        "env": "SENZING_DOCKER_COMPOSE_FILE",
+        "cli": "docker-compose-file"
     },
     "sleep_time_in_seconds": {
         "default": 0,
@@ -86,25 +68,14 @@ def get_parser():
     ''' Parse commandline arguments. '''
 
     subcommands = {
-        'task1': {
-            "help": 'Example task #1.',
+        'create-save-images': {
+            "help": 'Create the save-images.sh file.',
             "argument_aspects": ["common"],
             "arguments": {
-                "--senzing-dir": {
-                    "dest": "senzing_dir",
-                    "metavar": "SENZING_DIR",
-                    "help": "Location of Senzing. Default: /opt/senzing"
-                },
-            },
-        },
-        'task2': {
-            "help": 'Example task #2.',
-            "argument_aspects": ["common"],
-            "arguments": {
-                "--password": {
-                    "dest": "password",
-                    "metavar": "SENZING_PASSWORD",
-                    "help": "Example of information redacted in the log. Default: None"
+                "--docker-compose-file": {
+                    "dest": "docker_compose_file",
+                    "metavar": "SENZING_DOCKER_COMPOSE_FILE",
+                    "help": "Location of 'docker-compose.yaml' file. Default: None"
                 },
             },
         },
@@ -135,11 +106,6 @@ def get_parser():
                 "action": "store_true",
                 "help": "Enable debugging. (SENZING_DEBUG) Default: False"
             },
-            "--engine-configuration-json": {
-                "dest": "engine_configuration_json",
-                "metavar": "SENZING_ENGINE_CONFIGURATION_JSON",
-                "help": "Advanced Senzing engine configuration. Default: none"
-            },
         },
     }
 
@@ -154,7 +120,7 @@ def get_parser():
                 for argument, argument_value in arguments.items():
                     subcommands[subcommand]['arguments'][argument] = argument_value
 
-    parser = argparse.ArgumentParser(prog="init-container.py", description="Initialize Senzing installation. For more information, see https://github.com/Senzing/docker-init-container")
+    parser = argparse.ArgumentParser(prog="docker-compose-air-gapper.py", description="Initialize Senzing installation. For more information, see https://github.com/Senzing/docker-compose-air-gapper")
     subparsers = parser.add_subparsers(dest='subcommand', help='Subcommands (SENZING_SUBCOMMAND):')
 
     for subcommand_key, subcommand_values in subcommands.items():
@@ -184,8 +150,6 @@ MESSAGE_DEBUG = 900
 
 message_dictionary = {
     "100": "senzing-" + SENZING_PRODUCT_ID + "{0:04d}I",
-    "292": "Configuration change detected.  Old: {0} New: {1}",
-    "293": "For information on warnings and errors, see https://github.com/Senzing/stream-loader#errors",
     "294": "Version: {0}  Updated: {1}",
     "295": "Sleeping infinitely.",
     "296": "Sleeping {0} seconds.",
@@ -195,25 +159,11 @@ message_dictionary = {
     "300": "senzing-" + SENZING_PRODUCT_ID + "{0:04d}W",
     "499": "{0}",
     "500": "senzing-" + SENZING_PRODUCT_ID + "{0:04d}E",
-    "695": "Unknown database scheme '{0}' in database url '{1}'",
     "696": "Bad SENZING_SUBCOMMAND: {0}.",
     "697": "No processing done.",
     "698": "Program terminated with error.",
     "699": "{0}",
     "700": "senzing-" + SENZING_PRODUCT_ID + "{0:04d}E",
-    "885": "License has expired.",
-    "886": "G2Engine.addRecord() bad return code: {0}; JSON: {1}",
-    "888": "G2Engine.addRecord() G2ModuleNotInitialized: {0}; JSON: {1}",
-    "889": "G2Engine.addRecord() G2ModuleGenericException: {0}; JSON: {1}",
-    "890": "G2Engine.addRecord() Exception: {0}; JSON: {1}",
-    "891": "Original and new database URLs do not match. Original URL: {0}; Reconstructed URL: {1}",
-    "892": "Could not initialize G2Product with '{0}'. Error: {1}",
-    "893": "Could not initialize G2Hasher with '{0}'. Error: {1}",
-    "894": "Could not initialize G2Diagnostic with '{0}'. Error: {1}",
-    "895": "Could not initialize G2Audit with '{0}'. Error: {1}",
-    "896": "Could not initialize G2ConfigMgr with '{0}'. Error: {1}",
-    "897": "Could not initialize G2Config with '{0}'. Error: {1}",
-    "898": "Could not initialize G2Engine with '{0}'. Error: {1}",
     "899": "{0}",
     "900": "senzing-" + SENZING_PRODUCT_ID + "{0:04d}D",
     "998": "Debugging enabled.",
@@ -440,6 +390,122 @@ def exit_silently():
     ''' Exit program. '''
     sys.exit(0)
 
+
+# -----------------------------------------------------------------------------
+# Utility functions
+# -----------------------------------------------------------------------------
+
+def replace_variables_in_text(function_with_text, variables):
+    """ Perform variable replacement in text """
+
+    return function_with_text.__doc__.format(**variables)
+
+# -----------------------------------------------------------------------------
+# Text functions
+# -----------------------------------------------------------------------------
+
+def file_text_for_save_images():
+    """#!/usr/bin/env bash
+
+# The save-images.sh script takes 1 input:
+#  - DOCKER_IMAGE_NAMES
+# Given that input, the docker images are downloaded, saved, and compressed into a single file.
+
+# Enumerate docker images to be processed.
+
+DOCKER_IMAGE_NAMES=(
+{image_list}
+)
+
+# Make output variables.
+
+MY_HOME=~
+OUTPUT_DATE=$(date +%s)
+OUTPUT_DATE_HUMAN=$(date --rfc-3339=seconds)
+OUTPUT_FILE=${{MY_HOME}}/docker-compose-air-gapper-${{OUTPUT_DATE}}.tgz
+OUTPUT_DIR_NAME=docker-compose-air-gapper-${{OUTPUT_DATE}}
+OUTPUT_DIR=${{MY_HOME}}/${{OUTPUT_DIR_NAME}}
+OUTPUT_IMAGES_DIR=${{OUTPUT_DIR}}/images
+OUTPUT_LOAD_REPOSITORY_SCRIPT=${{OUTPUT_DIR}}/load-images.sh
+
+# Make output directories.
+
+mkdir ${{OUTPUT_DIR}}
+mkdir ${{OUTPUT_IMAGES_DIR}}
+
+# Define return codes.
+
+OK=0
+NOT_OK=1
+
+# Create preamble to OUTPUT_LOAD_REPOSITORY_SCRIPT.
+
+cat <<EOT > ${{OUTPUT_LOAD_REPOSITORY_SCRIPT}}
+#!/usr/bin/env bash
+
+# 'load-images.sh' uses 'docker load' to import images into local registry.
+# Created on ${{OUTPUT_DATE_HUMAN}}
+
+EOT
+
+chmod +x ${{OUTPUT_LOAD_REPOSITORY_SCRIPT}}
+
+# Save Docker images and scripts to output directory.
+
+for DOCKER_IMAGE_NAME in ${{DOCKER_IMAGE_NAMES[@]}};
+do
+
+  # Pull docker image.
+
+  echo "Pulling ${{DOCKER_IMAGE_NAME}} from DockerHub."
+  docker pull ${{DOCKER_IMAGE_NAME}}
+
+  # Do a "docker save" to make a file from docker image.
+
+  DOCKER_OUTPUT_FILENAME=$(echo ${{DOCKER_IMAGE_NAME}} | tr "/:" "--")-${{OUTPUT_DATE}}.tar
+  echo "Creating ${{OUTPUT_IMAGES_DIR}}/${{DOCKER_OUTPUT_FILENAME}}"
+  docker save ${{DOCKER_IMAGE_NAME}} --output ${{OUTPUT_IMAGES_DIR}}/${{DOCKER_OUTPUT_FILENAME}}
+
+  # Add commands to OUTPUT_LOAD_REPOSITORY_SCRIPT to load file into local repository.
+
+  echo "docker load --input images/${{DOCKER_OUTPUT_FILENAME}}" >> ${{OUTPUT_LOAD_REPOSITORY_SCRIPT}}
+
+done
+
+# Copy additional files into output directory.
+
+cp ${{DOCKER_COMPOSE_FILENAME}} ${{OUTPUT_DIR}}/docker-compose.yaml
+
+# Compress results.
+
+tar -zcvf ${{OUTPUT_FILE}} --directory ${{MY_HOME}} ${{OUTPUT_DIR_NAME}}
+
+# Epilog.
+
+echo "Done."
+echo "    Output file: ${{OUTPUT_FILE}}"
+echo "    Which is a compressed version of ${{OUTPUT_DIR}}"
+
+exit ${{OK}}
+"""
+    return 0
+
+# -----------------------------------------------------------------------------
+# Text functions
+# -----------------------------------------------------------------------------
+
+def create_output_text(images):
+    """ Perform variable replacement in text """
+
+    image_list = ""
+    for image in images:
+        image_list += "  \"{0}\"\n".format(image)
+    variables = {
+        "image_list": image_list,
+    }
+    return replace_variables_in_text(file_text_for_save_images, variables)
+
+
 # -----------------------------------------------------------------------------
 # do_* functions
 #   Common function signature: do_XXX(args)
@@ -462,8 +528,8 @@ def do_docker_acceptance_test(args):
     logging.info(exit_template(config))
 
 
-def do_task1(args):
-    ''' Do a task. '''
+def do_create_save_images(args):
+    ''' Create 'save-images.sh' '''
 
     # Get context from CLI, environment variables, and ini files.
 
@@ -473,30 +539,35 @@ def do_task1(args):
 
     logging.info(entry_template(config))
 
-    # Do work.
+    # Construct docker_compose.
 
-    print("senzing-dir: {senzing_dir}; debug: {debug}".format(**config))
+    docker_compose = {}
+    docker_compose_file = config.get('docker_compose_file')
+    if docker_compose_file:
+        with open(docker_compose_file) as a_file:
+            docker_compose = yaml.load(a_file)
+    else:
+        docker_compose = yaml.load(sys.stdin)
 
-    # Epilog.
+    # Create list of images.
 
-    logging.info(exit_template(config))
+    services = docker_compose.get('services', {})
+    images = []
+    for key, value in services.items():
+        images.append(value.get("image"))
 
+    # Create output.
 
-def do_task2(args):
-    ''' Do a task. Print the complete config object'''
+    output_text = create_output_text(images)
 
-    # Get context from CLI, environment variables, and ini files.
+    # Print output.
 
-    config = get_configuration(args)
-
-    # Prolog.
-
-    logging.info(entry_template(config))
-
-    # Do work.
-
-    config_json = json.dumps(config, sort_keys=True, indent=4)
-    print(config_json)
+    output_file = config.get('output_file')
+    if output_file:
+        with open(output_file, w) as a_file:
+            a_file.write(output_text)
+    else:
+        print(output_text)
 
     # Epilog.
 

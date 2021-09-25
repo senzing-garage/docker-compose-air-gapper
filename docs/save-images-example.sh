@@ -1,13 +1,8 @@
 #!/usr/bin/env bash
 
-# The save-images.sh script takes 2 inputs:
-#  - DOCKER_COMPOSE_FILENAME
+# The save-images.sh script takes 1 input:
 #  - DOCKER_IMAGE_NAMES
-# With those inputs, the docker images are downloaded, saved, and compressed into a single file.
-
-# Identify source docker-compose.yaml file.
-
-DOCKER_COMPOSE_FILENAME=~/senzing.git/docker-compose-demo/resources/postgresql/docker-compose-rabbitmq-postgresql.yaml
+# Given that input, the docker images are downloaded, saved, and compressed into a single file.
 
 # Enumerate docker images to be processed.
 
@@ -43,7 +38,6 @@ cat <<EOT > ${OUTPUT_LOAD_REPOSITORY_SCRIPT}
 #!/usr/bin/env bash
 
 # 'load-images.sh' uses 'docker load' to import images into local registry.
-# Source Dockerfile: ${DOCKER_COMPOSE_FILENAME}
 # Created on ${OUTPUT_DATE_HUMAN}
 
 EOT
