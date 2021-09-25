@@ -1,10 +1,10 @@
 # docker-compose-air-gapper
-Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
 
+Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
 
 ## In an internet-connected environment
 
-### Download
+### Download docker-compsoe-air-gapper.py
 
 1. Get a local copy of
    [docker-compose-air-gapper.py](docker-compose-air-gapper.py).
@@ -52,9 +52,9 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
 
     ```
 
-### XXX
+### XXXX
 
-### xxx
+### xxxXX
 
 1. XXX
    Example:
