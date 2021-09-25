@@ -2,7 +2,7 @@
 Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
 
 
-## In an internet-connected enviroment
+## In an internet-connected environment
 
 ### Download
 
@@ -66,7 +66,7 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
 
 ### Air-gapped prerequisites
 
-1. Software requirements:
+1. Software requirements on the air-gapped system:
     1. [docker](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker.md)
     1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker-compose.md)
 1. The `docker-compose-air-gapper-0000000000.tgz` needs to be transferred to the air-gapped system.
@@ -100,6 +100,7 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
     ```console
     export SENZING_TGZ_FILENAME=${SENZING_TGZ_FILE##*/}
     export SENZING_INPUT_DIRECTORY=${SENZING_OUTPUT_DIRECTORY}/${SENZING_TGZ_FILENAME%%.tgz}
+
     cd ${SENZING_INPUT_DIRECTORY}
     ```
 
