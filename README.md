@@ -27,6 +27,20 @@ Process:
     1. [Legend](#legend)
 1. [Related artifacts](#related-artifacts)
 1. [Expectations](#expectations)
+1. [In an internet-connected environment](#in-an-internet-connected-environment)
+    1. [Internet-connected prerequisites](#internet-connected-prerequisites)
+    1. [Create save-images.sh](#create-save-imagessh)
+    1. [Run save-images.sh](#run-save-imagessh)
+1. [In an air-gapped environment](#in-an-air-gapped-environment)
+    1. [Air-gapped prerequisites](#air-gapped-prerequisites)
+    1. [Load air-gapped docker repository](#load-air-gapped-docker-repository)
+1. [Develop](#develop)
+1. [Advanced](#advanced)
+    1. [Download docker-compose-air-gapper.py](#download-docker-compose-air-gapperpy)
+    1. [Create save-images.sh using command-line](#create-save-imagessh-using-command-line)
+    1. [Modified docker-compose.yaml file](#modified-docker-composeyaml.file)
+1. [Errors](#errors)
+1. [References](#references)
 
 ## Preamble
 
@@ -37,7 +51,7 @@ For the most part, instructions are copy and paste.
 Whenever thinking is needed, it's marked with a "thinking" icon :thinking:.
 Whenever customization is needed, it's marked with a "pencil" icon :pencil2:.
 If the instructions are not clear, please let us know by opening a new
-[Documentation issue](https://github.com/Senzing/template-python/issues/new?template=documentation_request.md)
+[Documentation issue](https://github.com/Senzing/docker-compose-air-gapper/issues/new?template=documentation_request.md)
 describing where we can improve.   Now on with the show...
 
 ### Legend
@@ -103,7 +117,7 @@ describing where we can improve.   Now on with the show...
     docker-compose \
       --file docker-compose.yaml \
       config \
-    > docker-compose-normalized.yaml
+      > docker-compose-normalized.yaml
     ```
 
 1. Using a `senzing/docker-compose-air-gapper` docker container,
@@ -144,7 +158,7 @@ describing where we can improve.   Now on with the show...
         Which is a compressed version of /home/senzing/docker-compose-air-gapper-0000000000
     ```
 
-## In air-gapped environment
+## In an air-gapped environment
 
 ### Air-gapped prerequisites
 
