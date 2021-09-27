@@ -34,20 +34,18 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
     source ~/docker-versions-latest.sh
     ```
 
-1. Use `docker-compose config` to normalize the `docker-compose.yaml` file.
-
-   **Note:** Unfortunately `docker-compose config` only accepts 4 file names:
-   `docker-compose.yml`, `docker-compose.yaml`, `compose.yml`, and `compose.yaml`.
-   So if your docker-compose.yaml file in the `SENZING_DOCKER_COMPOSE_DIRECTORY` directory has a different name,
-   it will need to be renamed or copied to an acceptable name.
-   A docker-compose [GitHub issue](https://github.com/docker/compose/issues/8671) has been created to address this.
+1. Use [docker-compose config](https://docs.docker.com/compose/reference/config/)
+   to normalize the `docker-compose.yaml` file into a new `docker-compose-normalized.yaml` file.
 
    Example:
 
     ```console
     cd ${SENZING_DOCKER_COMPOSE_DIRECTORY}
 
-    docker-compose config > docker-compose-normalized.yaml
+    docker-compose \
+      --file docker-compose.yaml \
+      config \
+    > docker-compose-normalized.yaml
     ```
 
 1. Using a `senzing/docker-compose-air-gapper` docker container,
@@ -214,7 +212,7 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
     ```console
     cd ${SENZING_DOCKER_COMPOSE_DIRECTORY}
 
-    docker-compose config \
+    docker-compose --file docker-compose.yaml config \
        | ${SENZING_DOWNLOAD_FILE} create-save-images \
        > ${SENZING_SAVE_IMAGE_FILE}
     ```
@@ -225,3 +223,24 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
     ```console
     chmod +x ${SENZING_SAVE_IMAGE_FILE}
     ```
+
+### Modified docker-compose.yaml file
+
+Since
+[docker-compose-air-gapper.py](docker-compose-air-gapper.py)
+only looks at a few properties in the `docker-compose.yaml` file,
+it's possible to make a skeleton `docker-compose.yaml`
+file for the purposes of creating a TGZ file for an air-gapped enviroment.
+
+For instance the `docker-compose-skeleton.yaml` could look like this:
+
+```yaml
+
+services:
+  x:
+    image: senzing/senzing-console:1.0.3
+  y:
+    image: senzing/stream-loader:1.9.0
+  z:
+    image: senzing/senzing-api-server:2.7.4
+```
