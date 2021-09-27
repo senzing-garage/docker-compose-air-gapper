@@ -267,5 +267,6 @@ file for the purposes of creating a TGZ file for an air-gapped enviroment.
    Example:
 
     ```console
+    chmod +x /tmp/save-images.sh
     /tmp/save-images.sh
     ```
