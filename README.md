@@ -262,3 +262,10 @@ file for the purposes of creating a TGZ file for an air-gapped enviroment.
       --volume /tmp:/data \
       senzing/docker-compose-air-gapper
     ```
+
+1. Run `save-images.sh`.
+   Example:
+
+    ```console
+    /tmp/save-images.sh
+    ```
