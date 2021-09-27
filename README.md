@@ -7,7 +7,7 @@ based on a `docker-compose.yaml` file.
 
 ## Overview
 
-Steps:
+Process:
 
 1. In an internet-connected environment:
     1. "Normalize" a `docker-compose.yaml` file to instantiate variables.
@@ -17,7 +17,7 @@ Steps:
        Example: [save-images-example.sh](docs/save-images-example.sh)
     1. Run shell script to create TGZ file containing docker images
        with a script to do `docker load`.
-1. In an air-gapped enviroment:
+1. In an air-gapped environment:
     1. Uncompress the TGZ file.
     1. Run the script to perform `docker load` of the docker images.
 
