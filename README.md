@@ -38,7 +38,7 @@ Process:
 1. [Advanced](#advanced)
     1. [Download docker-compose-air-gapper.py](#download-docker-compose-air-gapperpy)
     1. [Create save-images.sh using command-line](#create-save-imagessh-using-command-line)
-    1. [Modified docker-compose.yaml file](#modified-docker-composeyaml.file)
+    1. [Modified docker-compose.yaml file](#modified-docker-composeyaml-file)
 1. [Errors](#errors)
 1. [References](#references)
 
