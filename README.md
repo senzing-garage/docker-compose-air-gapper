@@ -1,6 +1,17 @@
 # docker-compose-air-gapper
 
-Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
+## Synopsis
+
+Create a TGZ bundle for air-gapped environments based on `docker-compose.yaml`
+
+## Overview
+
+Steps:
+
+1. Create a `tgz` file containing
+1. "Normalize" a `docker-compose.yaml` file to instantiate variables.
+1. Scan through the normalized `docker-compose.yaml` file looking for `image:` tags
+1. Create a shell script that
 
 ## In an internet-connected environment
 
