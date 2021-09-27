@@ -2,16 +2,63 @@
 
 ## Synopsis
 
-Create a TGZ bundle for air-gapped environments based on `docker-compose.yaml`
+Create a TGZ bundle of docker images for air-gapped environments
+based on a `docker-compose.yaml` file.
 
 ## Overview
 
 Steps:
 
-1. Create a `tgz` file containing
-1. "Normalize" a `docker-compose.yaml` file to instantiate variables.
-1. Scan through the normalized `docker-compose.yaml` file looking for `image:` tags
-1. Create a shell script that
+1. In an internet-connected environment:
+    1. "Normalize" a `docker-compose.yaml` file to instantiate variables.
+    1. Scan through the normalized `docker-compose.yaml` file looking for `image:` tags.
+    1. Create a shell script that does `docker pull` and `docker save`
+       for the images.
+       Example: [save-images-example.sh](docs/save-images-example.sh)
+    1. Run shell script to create TGZ file containing docker images
+       with a script to do `docker load`.
+1. In an air-gapped enviroment:
+    1. Uncompress the TGZ file.
+    1. Run the script to perform `docker load` of the docker images.
+
+### Contents
+
+1. [Preamble](#preamble)
+    1. [Legend](#legend)
+1. [Related artifacts](#related-artifacts)
+1. [Expectations](#expectations)
+
+## Preamble
+
+At [Senzing](http://senzing.com),
+we strive to create GitHub documentation in a
+"[don't make me think](https://github.com/Senzing/knowledge-base/blob/master/WHATIS/dont-make-me-think.md)" style.
+For the most part, instructions are copy and paste.
+Whenever thinking is needed, it's marked with a "thinking" icon :thinking:.
+Whenever customization is needed, it's marked with a "pencil" icon :pencil2:.
+If the instructions are not clear, please let us know by opening a new
+[Documentation issue](https://github.com/Senzing/template-python/issues/new?template=documentation_request.md)
+describing where we can improve.   Now on with the show...
+
+### Legend
+
+1. :thinking: - A "thinker" icon means that a little extra thinking may be required.
+   Perhaps there are some choices to be made.
+   Perhaps it's an optional step.
+1. :pencil2: - A "pencil" icon means that the instructions may need modification before performing.
+1. :warning: - A "warning" icon means that something tricky is happening, so pay attention.
+
+## Related artifacts
+
+1. [DockerHub](https://hub.docker.com/r/senzing/docker-compose-air-gapper)
+
+## Expectations
+
+- **Space:** This repository and demonstration require 1-3 GB free disk space per image saved.
+- **Time:** Budget 10 minutes per image saved, depending on CPU and network speeds.
+- **Background knowledge:** This repository assumes a working knowledge of:
+  - [Docker](https://github.com/Senzing/knowledge-base/blob/master/WHATIS/docker.md)
+  - [Docker-compose](https://github.com/Senzing/knowledge-base/blob/master/WHATIS/docker-compose.md)
 
 ## In an internet-connected environment
 
@@ -146,27 +193,6 @@ Steps:
 
     ```console
     ./load-images.sh
-    ```
-
-### Run docker-compose up
-
-1. :pencil2: Set environment variables that are use by the `docker-compose.yaml` file.
-   **NOTE:** Depending on the `docker-compose.yaml`, more environment variables may need to be set.
-   Example:
-
-    ```console
-    export SENZING_DATA_VERSION_DIR=/opt/senzing/data/2.0.0
-    export SENZING_ETC_DIR=/etc/opt/senzing
-    export SENZING_G2_DIR=/opt/senzing/g2
-    export SENZING_VAR_DIR=/var/opt/senzing
-    ```
-
-1. Bring up docker-compose.
-   Example:
-
-    ```console
-    cd ${SENZING_INPUT_DIRECTORY}
-    docker-compose up
     ```
 
 ## Alternatives
