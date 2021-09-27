@@ -1,6 +1,78 @@
 # docker-compose-air-gapper
 
-Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
+## Synopsis
+
+Create a TGZ bundle of docker images for air-gapped environments
+based on a `docker-compose.yaml` file.
+
+## Overview
+
+Process:
+
+1. In an internet-connected environment:
+    1. "Normalize" a `docker-compose.yaml` file to instantiate variables.
+    1. Scan through the normalized `docker-compose.yaml` file looking for `image:` tags.
+    1. Create a shell script that does `docker pull` and `docker save`
+       for the images.
+       Example: [save-images-example.sh](docs/save-images-example.sh)
+    1. Run shell script to create TGZ file containing docker images
+       with a script to do `docker load`.
+1. In an air-gapped environment:
+    1. Uncompress the TGZ file.
+    1. Run the script to perform `docker load` of the docker images.
+
+### Contents
+
+1. [Preamble](#preamble)
+    1. [Legend](#legend)
+1. [Related artifacts](#related-artifacts)
+1. [Expectations](#expectations)
+1. [In an internet-connected environment](#in-an-internet-connected-environment)
+    1. [Internet-connected prerequisites](#internet-connected-prerequisites)
+    1. [Create save-images.sh](#create-save-imagessh)
+    1. [Run save-images.sh](#run-save-imagessh)
+1. [In an air-gapped environment](#in-an-air-gapped-environment)
+    1. [Air-gapped prerequisites](#air-gapped-prerequisites)
+    1. [Load air-gapped docker repository](#load-air-gapped-docker-repository)
+1. [Develop](#develop)
+1. [Advanced](#advanced)
+    1. [Download docker-compose-air-gapper.py](#download-docker-compose-air-gapperpy)
+    1. [Create save-images.sh using command-line](#create-save-imagessh-using-command-line)
+    1. [Modified docker-compose.yaml file](#modified-docker-composeyaml-file)
+1. [Errors](#errors)
+1. [References](#references)
+
+## Preamble
+
+At [Senzing](http://senzing.com),
+we strive to create GitHub documentation in a
+"[don't make me think](https://github.com/Senzing/knowledge-base/blob/master/WHATIS/dont-make-me-think.md)" style.
+For the most part, instructions are copy and paste.
+Whenever thinking is needed, it's marked with a "thinking" icon :thinking:.
+Whenever customization is needed, it's marked with a "pencil" icon :pencil2:.
+If the instructions are not clear, please let us know by opening a new
+[Documentation issue](https://github.com/Senzing/docker-compose-air-gapper/issues/new?template=documentation_request.md)
+describing where we can improve.   Now on with the show...
+
+### Legend
+
+1. :thinking: - A "thinker" icon means that a little extra thinking may be required.
+   Perhaps there are some choices to be made.
+   Perhaps it's an optional step.
+1. :pencil2: - A "pencil" icon means that the instructions may need modification before performing.
+1. :warning: - A "warning" icon means that something tricky is happening, so pay attention.
+
+## Related artifacts
+
+1. [DockerHub](https://hub.docker.com/r/senzing/docker-compose-air-gapper)
+
+## Expectations
+
+- **Space:** This repository and demonstration require 1-3 GB free disk space per image saved.
+- **Time:** Budget 10 minutes per image saved, depending on CPU and network speeds.
+- **Background knowledge:** This repository assumes a working knowledge of:
+  - [Docker](https://github.com/Senzing/knowledge-base/blob/master/WHATIS/docker.md)
+  - [Docker-compose](https://github.com/Senzing/knowledge-base/blob/master/WHATIS/docker-compose.md)
 
 ## In an internet-connected environment
 
@@ -34,20 +106,18 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
     source ~/docker-versions-latest.sh
     ```
 
-1. Use `docker-compose config` to normalize the `docker-compose.yaml` file.
-
-   **Note:** Unfortunately `docker-compose config` only accepts 4 file names:
-   `docker-compose.yml`, `docker-compose.yaml`, `compose.yml`, and `compose.yaml`.
-   So if your docker-compose.yaml file in the `SENZING_DOCKER_COMPOSE_DIRECTORY` directory has a different name,
-   it will need to be renamed or copied to an acceptable name.
-   A docker-compose [GitHub issue](https://github.com/docker/compose/issues/8671) has been created to address this.
+1. Use [docker-compose config](https://docs.docker.com/compose/reference/config/)
+   to normalize the `docker-compose.yaml` file into a new `docker-compose-normalized.yaml` file.
 
    Example:
 
     ```console
     cd ${SENZING_DOCKER_COMPOSE_DIRECTORY}
 
-    docker-compose config > docker-compose-normalized.yaml
+    docker-compose \
+      --file docker-compose.yaml \
+      config \
+      > docker-compose-normalized.yaml
     ```
 
 1. Using a `senzing/docker-compose-air-gapper` docker container,
@@ -88,7 +158,7 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
         Which is a compressed version of /home/senzing/docker-compose-air-gapper-0000000000
     ```
 
-## In air-gapped environment
+## In an air-gapped environment
 
 ### Air-gapped prerequisites
 
@@ -139,28 +209,61 @@ Create a TGZ bundle for air-gapped environments based on docker-compose.yaml
     ./load-images.sh
     ```
 
-### Run docker-compose up
+## Develop
 
-1. :pencil2: Set environment variables that are use by the `docker-compose.yaml` file.
-   **NOTE:** Depending on the `docker-compose.yaml`, more environment variables may need to be set.
-   Example:
+The following instructions are used when modifying and building the Docker image.
+
+### Prerequisites for development
+
+:thinking: The following tasks need to be complete before proceeding.
+These are "one-time tasks" which may already have been completed.
+
+1. The following software programs need to be installed:
+    1. [git](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-git.md)
+    1. [make](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-make.md)
+    1. [docker](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker.md)
+
+### Clone repository
+
+For more information on environment variables,
+see [Environment Variables](https://github.com/Senzing/knowledge-base/blob/master/lists/environment-variables.md).
+
+1. Set these environment variable values:
 
     ```console
-    export SENZING_DATA_VERSION_DIR=/opt/senzing/data/2.0.0
-    export SENZING_ETC_DIR=/etc/opt/senzing
-    export SENZING_G2_DIR=/opt/senzing/g2
-    export SENZING_VAR_DIR=/var/opt/senzing
+    export GIT_ACCOUNT=senzing
+    export GIT_REPOSITORY=docker-compose-air-gapper
+    export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
+    export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
     ```
 
-1. Bring up docker-compose.
-   Example:
+1. Using the environment variables values just set, follow steps in [clone-repository](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/clone-repository.md) to install the Git repository.
+
+### Build Docker image
+
+1. **Option #1:** Using `docker` command and GitHub.
 
     ```console
-    cd ${SENZING_INPUT_DIRECTORY}
-    docker-compose up
+    sudo docker build \
+      --tag senzing/docker-compose-air-gapper \
+      https://github.com/senzing/docker-compose-air-gapper.git
     ```
 
-## Alternatives
+1. **Option #2:** Using `docker` command and local repository.
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    sudo docker build --tag senzing/docker-compose-air-gapper .
+    ```
+
+1. **Option #3:** Using `make` command.
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    sudo make docker-build
+    ```
+
+## Advanced
 
 ### Download docker-compose-air-gapper.py
 
@@ -214,7 +317,7 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
     ```console
     cd ${SENZING_DOCKER_COMPOSE_DIRECTORY}
 
-    docker-compose config \
+    docker-compose --file docker-compose.yaml config \
        | ${SENZING_DOWNLOAD_FILE} create-save-images \
        > ${SENZING_SAVE_IMAGE_FILE}
     ```
@@ -225,3 +328,56 @@ This step creates the `save-images.sh` shell script using a specified `docker-co
     ```console
     chmod +x ${SENZING_SAVE_IMAGE_FILE}
     ```
+
+### Modified docker-compose.yaml file
+
+Since
+[docker-compose-air-gapper.py](docker-compose-air-gapper.py)
+only looks at a few properties in the `docker-compose.yaml` file,
+it's possible to make a skeleton `docker-compose.yaml`
+file for the purposes of creating a TGZ file for an air-gapped enviroment.
+
+1. For example, a `/tmp/docker-compose-skeleton.yaml` file could look like this:
+
+    ```yaml
+    services:
+      x:
+        image: senzing/senzing-console:1.0.3
+      y:
+        image: senzing/stream-loader:1.9.0
+      z:
+        image: senzing/senzing-api-server:2.7.4
+    ```
+
+1. Since the `docker-compose-skeleton.yaml` file is already "normalized"
+   (i.e. there are no variables for substitution), there is no need to run `docker-compose config`.
+
+1. Using a `senzing/docker-compose-air-gapper` docker container,
+   create a `save-images.sh` file in the `/tmp` directory.
+   Example:
+
+    ```console
+    docker run \
+      --env SENZING_DOCKER_COMPOSE_FILE=/data/docker-compose-skeleton.yaml \
+      --env SENZING_OUTPUT_FILE=/data/save-images.sh \
+      --env SENZING_SUBCOMMAND=create-save-images \
+      --interactive \
+      --rm \
+      --tty \
+      --volume /tmp:/data \
+      senzing/docker-compose-air-gapper
+    ```
+
+1. Run `save-images.sh`.
+   Example:
+
+    ```console
+    chmod +x /tmp/save-images.sh
+    /tmp/save-images.sh
+    ```
+
+## Errors
+
+1. See [docs/errors.md](docs/errors.md).
+
+## References
