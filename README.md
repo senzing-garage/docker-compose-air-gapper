@@ -232,15 +232,33 @@ only looks at a few properties in the `docker-compose.yaml` file,
 it's possible to make a skeleton `docker-compose.yaml`
 file for the purposes of creating a TGZ file for an air-gapped enviroment.
 
-For instance the `docker-compose-skeleton.yaml` could look like this:
+1. For example, a `/tmp/docker-compose-skeleton.yaml` could look like this:
 
-```yaml
+    ```yaml
+    services:
+      x:
+        image: senzing/senzing-console:1.0.3
+      y:
+        image: senzing/stream-loader:1.9.0
+      z:
+        image: senzing/senzing-api-server:2.7.4
+    ```
 
-services:
-  x:
-    image: senzing/senzing-console:1.0.3
-  y:
-    image: senzing/stream-loader:1.9.0
-  z:
-    image: senzing/senzing-api-server:2.7.4
-```
+1. Since the `docker-compose-skeleton.yaml` file is already "normalized"
+   (i.e. there are no variables for substitution), there is no need to run `docker-compose config`.
+
+1. Using the `senzing/docker-compose-air-gapper` docker container,
+   create a `save-images.sh` file in the `/tmp` directory.
+   Example:
+
+    ```console
+    docker run \
+      --env SENZING_DOCKER_COMPOSE_FILE=/data/docker-compose-skeleton.yaml \
+      --env SENZING_OUTPUT_FILE=/data/save-images.sh \
+      --env SENZING_SUBCOMMAND=create-save-images \
+      --interactive \
+      --rm \
+      --tty \
+      --volume /tmp:/data \
+      senzing/docker-compose-air-gapper
+    ```
