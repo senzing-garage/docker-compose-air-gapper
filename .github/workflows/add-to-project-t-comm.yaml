@@ -1,7 +1,7 @@
 # Based on
 # - https://github.com/srggrs/assign-one-project-github-action
 
-name: Auto Assign issue to t-comm project
+name: Auto Assign issue to project
 
 on:
   issues:
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Assign issues to project
-      uses: Senzing/github-action-add-issue-to-project@1.0.0
+      uses: Senzing/github-action-add-issue-to-project@main
       with:
         project: 'https://github.com/orgs/Senzing/projects/2'
         column_name: 'Backlog'
