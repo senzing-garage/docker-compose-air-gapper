@@ -434,7 +434,7 @@ DOCKER_IMAGE_NAMES=(
 MY_HOME=${{MY_HOME:-~}}
 OUTPUT_DATE=$(date +%s)
 OUTPUT_DATE_HUMAN=$(date --rfc-3339=seconds)
-OUTPUT_FILE=${{OUTPUT_FILE:-${MY_HOME}/docker-compose-air-gapper-${OUTPUT_DATE}.tgz}}
+OUTPUT_FILE=${{OUTPUT_FILE:-${{MY_HOME}}/docker-compose-air-gapper-${OUTPUT_DATE}.tgz}}
 OUTPUT_DIR_NAME=docker-compose-air-gapper-${{OUTPUT_DATE}}
 OUTPUT_DIR=${{MY_HOME}}/${{OUTPUT_DIR_NAME}}
 OUTPUT_IMAGES_DIR=${{OUTPUT_DIR}}/images
