@@ -427,7 +427,8 @@ def file_text_for_save_images():
 # Enumerate docker images to be processed.
 
 DOCKER_IMAGE_NAMES=(
-{image_list}
+{image_list})
+
 # Make output variables.
 
 MY_HOME=${{MY_HOME:-~}}
