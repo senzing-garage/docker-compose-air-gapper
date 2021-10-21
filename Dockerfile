@@ -1,11 +1,11 @@
-ARG BASE_IMAGE=debian:10.10
+ARG BASE_IMAGE=debian:10.10@sha256:e5cfab8012b17d80f93a7f567797b0c8a2839069d4f50e499152162152518663
 FROM ${BASE_IMAGE}
 
-ENV REFRESHED_AT=2021-09-25
+ENV REFRESHED_AT=2021-10-04
 
 LABEL Name="senzing/docker-compose-air-gapper" \
       Maintainer="support@senzing.com" \
-      Version="1.0.0"
+      Version="1.0.1"
 
 HEALTHCHECK CMD ["/app/healthcheck.sh"]
 
@@ -27,7 +27,7 @@ COPY requirements.txt ./
 RUN pip3 install --upgrade pip \
  && pip3 install -r requirements.txt \
  && rm requirements.txt
- 
+
 # Copy files from repository.
 
 COPY ./rootfs /
