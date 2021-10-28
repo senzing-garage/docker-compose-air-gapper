@@ -553,7 +553,7 @@ def do_create_save_images(args):
     docker_compose_file = config.get('docker_compose_file')
     if docker_compose_file:
         with open(docker_compose_file) as a_file:
-            docker_compose = yaml.load(a_file)
+            docker_compose = yaml.safe_load(a_file)
     else:
         docker_compose = yaml.load(sys.stdin)
 
