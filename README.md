@@ -246,7 +246,7 @@ see [Environment Variables](https://github.com/Senzing/knowledge-base/blob/maste
     ```console
     sudo docker build \
       --tag senzing/docker-compose-air-gapper \
-      https://github.com/senzing/docker-compose-air-gapper.git
+      https://github.com/senzing/docker-compose-air-gapper.git#main
     ```
 
 1. **Option #2:** Using `docker` command and local repository.
