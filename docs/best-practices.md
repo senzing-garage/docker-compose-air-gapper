@@ -3,7 +3,7 @@
 ## README.md
 
 1. Use [Markdown lint](https://dlaa.me/markdownlint/) to adhere to
-    [Markdown rules](https://github.com/DavidAnson/markdownlint/blob/master/doc/Rules.md).
+    [Markdown rules](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md).
 
 ## Dockerfile
 

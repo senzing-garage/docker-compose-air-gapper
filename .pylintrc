@@ -1,0 +1,10 @@
+[pylint]
+good-names=
+    docker-compose-air-gapper
+ignore=
+    __init__.py,
+disable=
+    broad-except,
+    line-too-long,
+    too-many-branches,
+    too-many-locals,
