@@ -120,6 +120,13 @@ describing where we can improve.   Now on with the show...
       > docker-compose-normalized.yaml
     ```
 
+1. Get the latest version of `senzing/docker-compose-air-gapper`.
+   Example:
+
+    ```console
+    docker pull senzing/docker-compose-air-gapper:latest
+    ```
+
 1. Using a `senzing/docker-compose-air-gapper` docker container,
    create a `save-images.sh` file in the `SENZING_DOCKER_COMPOSE_DIRECTORY` directory.
    Example:
@@ -133,7 +140,7 @@ describing where we can improve.   Now on with the show...
       --rm \
       --tty \
       --volume ${SENZING_DOCKER_COMPOSE_DIRECTORY}:/data \
-      senzing/docker-compose-air-gapper
+      senzing/docker-compose-air-gapper:latest
     ```
 
 ### Run save-images.sh
