@@ -46,7 +46,7 @@ Process:
 
 At [Senzing](http://senzing.com),
 we strive to create GitHub documentation in a
-"[don't make me think](https://github.com/Senzing/knowledge-base/blob/master/WHATIS/dont-make-me-think.md)" style.
+"[don't make me think](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/dont-make-me-think.md)" style.
 For the most part, instructions are copy and paste.
 Whenever thinking is needed, it's marked with a "thinking" icon :thinking:.
 Whenever customization is needed, it's marked with a "pencil" icon :pencil2:.
@@ -71,16 +71,16 @@ describing where we can improve.   Now on with the show...
 - **Space:** This repository and demonstration require 1-3 GB free disk space per image saved.
 - **Time:** Budget 10 minutes per image saved, depending on CPU and network speeds.
 - **Background knowledge:** This repository assumes a working knowledge of:
-  - [Docker](https://github.com/Senzing/knowledge-base/blob/master/WHATIS/docker.md)
-  - [Docker-compose](https://github.com/Senzing/knowledge-base/blob/master/WHATIS/docker-compose.md)
+  - [Docker](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/docker.md)
+  - [Docker-compose](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/docker-compose.md)
 
 ## In an internet-connected environment
 
 ### Internet-connected prerequisites
 
 1. Software requirements on the internet-connected (i.e. not the air-gapped) system:
-    1. [docker](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker.md)
-    1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker-compose.md)
+    1. [docker](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-docker.md)
+    1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-docker-compose.md)
 
 ### Create save-images.sh
 
@@ -100,10 +100,10 @@ describing where we can improve.   Now on with the show...
 
     ```console
     curl -X GET \
-      --output ~/docker-versions-latest.sh \
-      https://raw.githubusercontent.com/Senzing/knowledge-base/master/lists/docker-versions-latest.sh
+      --output ${SENZING_DOCKER_COMPOSE_DIRECTORY}/docker-versions-latest.sh \
+      https://raw.githubusercontent.com/Senzing/knowledge-base/main/lists/docker-versions-latest.sh
 
-    source ~/docker-versions-latest.sh
+    source ${SENZING_DOCKER_COMPOSE_DIRECTORY}/docker-versions-latest.sh
     ```
 
 1. Use [docker-compose config](https://docs.docker.com/compose/reference/config/)
@@ -120,6 +120,13 @@ describing where we can improve.   Now on with the show...
       > docker-compose-normalized.yaml
     ```
 
+1. Get the latest version of `senzing/docker-compose-air-gapper`.
+   Example:
+
+    ```console
+    docker pull senzing/docker-compose-air-gapper:latest
+    ```
+
 1. Using a `senzing/docker-compose-air-gapper` docker container,
    create a `save-images.sh` file in the `SENZING_DOCKER_COMPOSE_DIRECTORY` directory.
    Example:
@@ -133,7 +140,7 @@ describing where we can improve.   Now on with the show...
       --rm \
       --tty \
       --volume ${SENZING_DOCKER_COMPOSE_DIRECTORY}:/data \
-      senzing/docker-compose-air-gapper
+      senzing/docker-compose-air-gapper:latest
     ```
 
 ### Run save-images.sh
@@ -163,8 +170,8 @@ describing where we can improve.   Now on with the show...
 ### Air-gapped prerequisites
 
 1. Software requirements on the air-gapped system:
-    1. [docker](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker.md)
-    1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker-compose.md)
+    1. [docker](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-docker.md)
+    1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-docker-compose.md)
 1. The `docker-compose-air-gapper-0000000000.tgz` needs to be transferred to the air-gapped system.
 
 ### Load air-gapped docker repository
@@ -219,14 +226,14 @@ The following instructions are used when modifying and building the Docker image
 These are "one-time tasks" which may already have been completed.
 
 1. The following software programs need to be installed:
-    1. [git](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-git.md)
-    1. [make](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-make.md)
-    1. [docker](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-docker.md)
+    1. [git](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-git.md)
+    1. [make](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-make.md)
+    1. [docker](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-docker.md)
 
 ### Clone repository
 
 For more information on environment variables,
-see [Environment Variables](https://github.com/Senzing/knowledge-base/blob/master/lists/environment-variables.md).
+see [Environment Variables](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md).
 
 1. Set these environment variable values:
 
@@ -237,7 +244,7 @@ see [Environment Variables](https://github.com/Senzing/knowledge-base/blob/maste
     export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
     ```
 
-1. Using the environment variables values just set, follow steps in [clone-repository](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/clone-repository.md) to install the Git repository.
+1. Using the environment variables values just set, follow steps in [clone-repository](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/clone-repository.md) to install the Git repository.
 
 ### Build Docker image
 
@@ -267,8 +274,8 @@ see [Environment Variables](https://github.com/Senzing/knowledge-base/blob/maste
 
 ### Download docker-compose-air-gapper.py
 
-1. Have [python 3](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-python-3.md) installed.
-    1. Using [pip3](https://github.com/Senzing/knowledge-base/blob/master/HOWTO/install-pip3.md),
+1. Have [python 3](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-python-3.md) installed.
+    1. Using [pip3](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-pip3.md),
        install Python requirements in [requirements.txt](requirments.txt).
 
 1. Get a local copy of
