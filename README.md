@@ -100,10 +100,10 @@ describing where we can improve.   Now on with the show...
 
     ```console
     curl -X GET \
-      --output ~/docker-versions-latest.sh \
+      --output ${SENZING_DOCKER_COMPOSE_DIRECTORY}/docker-versions-latest.sh \
       https://raw.githubusercontent.com/Senzing/knowledge-base/main/lists/docker-versions-latest.sh
 
-    source ~/docker-versions-latest.sh
+    source ${SENZING_DOCKER_COMPOSE_DIRECTORY}/docker-versions-latest.sh
     ```
 
 1. Use [docker-compose config](https://docs.docker.com/compose/reference/config/)
