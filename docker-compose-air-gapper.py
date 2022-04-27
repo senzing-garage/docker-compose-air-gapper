@@ -24,7 +24,7 @@ import yaml
 # Metadata
 
 __all__ = []
-__version__ = "1.0.1"  # See https://www.python.org/dev/peps/pep-0396/
+__version__ = "1.0.2"  # See https://www.python.org/dev/peps/pep-0396/
 __date__ = '2021-09-25'
 __updated__ = '2022-04-27'
 
