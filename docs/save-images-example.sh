@@ -7,8 +7,8 @@
 # Enumerate docker images to be processed.
 
 DOCKER_IMAGE_NAMES=(
-  "senzing/senzing-console:1.0.3"
-  "senzing/xterm:1.2.0"
+  "senzing/senzing-console:1.2.2"
+  "senzing/xterm:1.4.3"
 )
 
 # Make output variables.

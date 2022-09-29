@@ -24,9 +24,9 @@ import yaml
 # Metadata
 
 __all__ = []
-__version__ = "1.0.2"  # See https://www.python.org/dev/peps/pep-0396/
+__version__ = "1.0.3"  # See https://www.python.org/dev/peps/pep-0396/
 __date__ = '2021-09-25'
-__updated__ = '2022-04-27'
+__updated__ = '2022-09-29'
 
 SENZING_PRODUCT_ID = "5028"  # See https://github.com/Senzing/knowledge-base/blob/main/lists/senzing-product-ids.md
 LOG_FORMAT = '%(asctime)s %(message)s'
