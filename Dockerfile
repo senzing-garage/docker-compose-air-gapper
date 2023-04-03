@@ -1,7 +1,7 @@
-ARG BASE_IMAGE=debian:11.6-slim@sha256:98d3b4b0cee264301eb1354e0b549323af2d0633e1c43375d0b25c01826b6790
+ARG BASE_IMAGE=debian:11.6-slim@sha256:7acda01e55b086181a6fa596941503648e423091ca563258e2c1657d140355b1
 FROM ${BASE_IMAGE}
 
-ENV REFRESHED_AT=2023-01-12
+ENV REFRESHED_AT=2023-04-03
 
 LABEL Name="senzing/docker-compose-air-gapper" \
       Maintainer="support@senzing.com" \
