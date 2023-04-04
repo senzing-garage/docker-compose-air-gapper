@@ -5,7 +5,7 @@ ENV REFRESHED_AT=2023-04-03
 
 LABEL Name="senzing/docker-compose-air-gapper" \
       Maintainer="support@senzing.com" \
-      Version="1.0.3"
+      Version="1.0.4"
 
 HEALTHCHECK CMD ["/app/healthcheck.sh"]
 
