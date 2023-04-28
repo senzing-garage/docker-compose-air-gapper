@@ -79,8 +79,8 @@ describing where we can improve.   Now on with the show...
 ### Internet-connected prerequisites
 
 1. Software requirements on the internet-connected (i.e. not the air-gapped) system:
-    1. [docker](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-docker.md)
-    1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-docker-compose.md)
+    1. [docker](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/docker.md)
+    1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/docker-compose.md)
 
 ### Create save-images.sh
 
@@ -170,8 +170,8 @@ describing where we can improve.   Now on with the show...
 ### Air-gapped prerequisites
 
 1. Software requirements on the air-gapped system:
-    1. [docker](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-docker.md)
-    1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-docker-compose.md)
+    1. [docker](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/docker.md)
+    1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/docker-compose.md)
 1. The `docker-compose-air-gapper-0000000000.tgz` needs to be transferred to the air-gapped system.
 
 ### Load air-gapped docker repository
@@ -226,9 +226,9 @@ The following instructions are used when modifying and building the Docker image
 These are "one-time tasks" which may already have been completed.
 
 1. The following software programs need to be installed:
-    1. [git](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-git.md)
-    1. [make](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-make.md)
-    1. [docker](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-docker.md)
+    1. [git](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/git.md)
+    1. [make](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/make.md)
+    1. [docker](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/docker.md)
 
 ### Clone repository
 
@@ -274,8 +274,8 @@ see [Environment Variables](https://github.com/Senzing/knowledge-base/blob/main/
 
 ### Download docker-compose-air-gapper.py
 
-1. Have [python 3](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-python-3.md) installed.
-    1. Using [pip3](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-pip3.md),
+1. Have [python 3](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/python.md) installed.
+    1. Using [pip3](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/pip3.md),
        install Python requirements in [requirements.txt](requirments.txt).
 
 1. Get a local copy of
