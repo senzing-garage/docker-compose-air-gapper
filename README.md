@@ -1,5 +1,17 @@
 # docker-compose-air-gapper
 
+If you are beginning your journey with
+[Senzing](https://senzing.com/),
+please start with
+[Senzing Quick Start guides](https://docs.senzing.com/quickstart/).
+
+You are in the
+[Senzing Garage](https://github.com/senzing-garage)
+where projects are "tinkered" on.
+Although this GitHub repository may help you understand an approach to using Senzing,
+it's not considered to be "production ready" and is not considered to be part of the Senzing product.
+Heck, it may not even be appropriate for your application of Senzing!
+
 ## Synopsis
 
 Create a TGZ bundle of docker images for air-gapped environments
@@ -46,12 +58,12 @@ Process:
 
 At [Senzing](http://senzing.com),
 we strive to create GitHub documentation in a
-"[don't make me think](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/dont-make-me-think.md)" style.
+"[don't make me think](https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/dont-make-me-think.md)" style.
 For the most part, instructions are copy and paste.
 Whenever thinking is needed, it's marked with a "thinking" icon :thinking:.
 Whenever customization is needed, it's marked with a "pencil" icon :pencil2:.
 If the instructions are not clear, please let us know by opening a new
-[Documentation issue](https://github.com/Senzing/docker-compose-air-gapper/issues/new?template=documentation_request.md)
+[Documentation issue](https://github.com/senzing-garage/docker-compose-air-gapper/issues/new?template=documentation_request.md)
 describing where we can improve.   Now on with the show...
 
 ### Legend
@@ -71,16 +83,16 @@ describing where we can improve.   Now on with the show...
 - **Space:** This repository and demonstration require 1-3 GB free disk space per image saved.
 - **Time:** Budget 10 minutes per image saved, depending on CPU and network speeds.
 - **Background knowledge:** This repository assumes a working knowledge of:
-  - [Docker](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/docker.md)
-  - [Docker-compose](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/docker-compose.md)
+  - [Docker](https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/docker.md)
+  - [Docker-compose](https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/docker-compose.md)
 
 ## In an internet-connected environment
 
 ### Internet-connected prerequisites
 
 1. Software requirements on the internet-connected (i.e. not the air-gapped) system:
-    1. [docker](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/docker.md)
-    1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/docker-compose.md)
+    1. [docker](https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/docker.md)
+    1. [docker-compose](https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/docker-compose.md)
 
 ### Create save-images.sh
 
@@ -94,7 +106,7 @@ describing where we can improve.   Now on with the show...
 1. :thinking: **Optional:** Set any needed environment variables.
    For instance,
    to specify the latest docker image tags for docker-compose.yaml files in
-   [docker-compose-demo](https://github.com/Senzing/docker-compose-demo)
+   [docker-compose-demo](https://github.com/senzing-garage/docker-compose-demo)
    environment variables can be set in this manner.
    Example:
 
@@ -170,8 +182,8 @@ describing where we can improve.   Now on with the show...
 ### Air-gapped prerequisites
 
 1. Software requirements on the air-gapped system:
-    1. [docker](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/docker.md)
-    1. [docker-compose](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/docker-compose.md)
+    1. [docker](https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/docker.md)
+    1. [docker-compose](https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/docker-compose.md)
 1. The `docker-compose-air-gapper-0000000000.tgz` needs to be transferred to the air-gapped system.
 
 ### Load air-gapped docker repository
@@ -226,14 +238,14 @@ The following instructions are used when modifying and building the Docker image
 These are "one-time tasks" which may already have been completed.
 
 1. The following software programs need to be installed:
-    1. [git](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/git.md)
-    1. [make](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/make.md)
-    1. [docker](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/docker.md)
+    1. [git](https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/git.md)
+    1. [make](https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/make.md)
+    1. [docker](https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/docker.md)
 
 ### Clone repository
 
 For more information on environment variables,
-see [Environment Variables](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md).
+see [Environment Variables](https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md).
 
 1. Set these environment variable values:
 
@@ -244,7 +256,7 @@ see [Environment Variables](https://github.com/Senzing/knowledge-base/blob/main/
     export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
     ```
 
-1. Using the environment variables values just set, follow steps in [clone-repository](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/clone-repository.md) to install the Git repository.
+1. Using the environment variables values just set, follow steps in [clone-repository](https://github.com/senzing-garage/knowledge-base/blob/main/HOWTO/clone-repository.md) to install the Git repository.
 
 ### Build Docker image
 
@@ -253,7 +265,7 @@ see [Environment Variables](https://github.com/Senzing/knowledge-base/blob/main/
     ```console
     sudo docker build \
       --tag senzing/docker-compose-air-gapper \
-      https://github.com/senzing/docker-compose-air-gapper.git#main
+      https://github.com/senzing-garage/docker-compose-air-gapper.git#main
     ```
 
 1. **Option #2:** Using `docker` command and local repository.
@@ -274,8 +286,8 @@ see [Environment Variables](https://github.com/Senzing/knowledge-base/blob/main/
 
 ### Download docker-compose-air-gapper.py
 
-1. Have [python 3](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/python.md) installed.
-    1. Using [pip3](https://github.com/Senzing/knowledge-base/blob/main/WHATIS/pip3.md),
+1. Have [python 3](https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/python.md) installed.
+    1. Using [pip3](https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/pip3.md),
        install Python requirements in [requirements.txt](requirments.txt).
 
 1. Get a local copy of
