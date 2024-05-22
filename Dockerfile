@@ -4,8 +4,8 @@ FROM ${BASE_IMAGE}
 ENV REFRESHED_AT=2024-05-22
 
 LABEL Name="senzing/docker-compose-air-gapper" \
-      Maintainer="support@senzing.com" \
-      Version="1.0.4"
+  Maintainer="support@senzing.com" \
+  Version="1.0.6"
 
 HEALTHCHECK CMD ["/app/healthcheck.sh"]
 
@@ -16,17 +16,17 @@ USER root
 # Install packages via apt.
 
 RUN apt update \
- && apt -y install \
-      python3-dev \
-      python3-pip \
- && rm -rf /var/lib/apt/lists/*
+  && apt -y install \
+  python3-dev \
+  python3-pip \
+  && rm -rf /var/lib/apt/lists/*
 
 # Install packages via PIP.
 
 COPY requirements.txt ./
 RUN pip3 install --upgrade pip \
- && pip3 install -r requirements.txt \
- && rm requirements.txt
+  && pip3 install -r requirements.txt \
+  && rm requirements.txt
 
 # Copy files from repository.
 
