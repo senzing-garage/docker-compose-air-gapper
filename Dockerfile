@@ -13,10 +13,10 @@ HEALTHCHECK CMD ["/app/healthcheck.sh"]
 
 USER root
 
-# Install packages via apt.
+# Install packages via apt-get.
 
-RUN apt update \
-  && apt -y install \
+RUN apt-get update \
+  && apt-get -y install \
   python3-dev \
   python3-pip \
   && rm -rf /var/lib/apt/lists/*
