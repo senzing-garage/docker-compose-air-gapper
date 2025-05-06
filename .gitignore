@@ -105,4 +105,9 @@ venv.bak/
 
 .DS_Store
 .pydevproject
-.history/
+
+# Visual Studio code
+.vscode/*
+!.vscode/cspell.json
+*.code-workspace
+.history
